@@ -1,16 +1,25 @@
-const Koa = require('koa')
+ const Koa = require('koa')
 const app = new Koa()
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const {isProd} = require("./utils/env");
 
+
+const errorViewRouter = require('./routes/view/error');
 const index = require('./routes/index')
 const users = require('./routes/users')
 
-// error handler
-onerror(app)
+// error handlere
+let  onerrorConf = {};
+if(isProd) {
+  onerrorConf = {
+    redirect: "/error"
+  }
+}
+onerror(app, onerrorConf)
 
 // middlewares
 app.use(bodyparser({
@@ -35,6 +44,7 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+ app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

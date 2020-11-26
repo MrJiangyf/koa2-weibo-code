@@ -1,3 +1,8 @@
+/**
+ * @description 存储配置
+ * @type {{port: number, host: string}}
+ */
+
 // const {isPort} = require("");
 
 let REDIS_CONF = {
@@ -16,6 +21,6 @@ let MYSQL_CONF = {
 
 module.exports = {
     REDIS_CONF,
-    MYSQL_CONF
+    MYSQL_CONF,
 }
 

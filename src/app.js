@@ -1,4 +1,4 @@
- const Koa = require('koa')
+const Koa = require('koa')
 const app = new Koa()
 const views = require('koa-views')
 const json = require('koa-json')
@@ -7,48 +7,66 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const {isProd} = require("./utils/env");
 
-
 const errorViewRouter = require('./routes/view/error');
 const index = require('./routes/index')
 const users = require('./routes/users')
 
+const session = require('koa-generic-session')
+const redisStore = require('koa-redis')
+const {REDIS_CONF} = require("./conf/db")
+
 // error handlere
-let  onerrorConf = {};
-if(isProd) {
-  onerrorConf = {
-    redirect: "/error"
-  }
+let onerrorConf = {};
+if (isProd) {
+    onerrorConf = {
+        redirect: "/error"
+    }
 }
 onerror(app, onerrorConf)
 
 // middlewares
 app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
+    enableTypes: ['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {
-  extension: 'ejs'
+    extension: 'ejs'
 }))
 
 // logger
 app.use(async (ctx, next) => {
-  const start = new Date()
-  await next()
-  const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+    const start = new Date()
+    await next()
+    const ms = new Date() - start
+    console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+
+// session 配置
+app.keys = ['jiangyf0725']
+app.use(session({
+    // 配置 cookie
+    cookie: {
+        path: '/',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+    },
+    // 配置 redis
+    store: redisStore({
+        all: "111.231.145.124:6379"
+    })
+}));
 
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
- app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
+app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx)
+    console.error('server error', err, ctx)
 });
 
 module.exports = app

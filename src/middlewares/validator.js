@@ -1,10 +1,8 @@
 /**
  * @description json schema 验证中间件
- * @author 双越老师
  */
 
 const { ErrorModel } = require('../model/ResModel')
-const { jsonSchemaFileInfo } = require('../model/ErrorInfo')
 
 /**
  * 生成 json schema 验证的中间件
@@ -15,9 +13,13 @@ function genValidator(validateFn) {
     async function validator(ctx, next) {
         const data = ctx.request.body
         const error = validateFn(data)
+        debugger
         if (error) {
             // 验证失败
-            ctx.body = new ErrorModel(jsonSchemaFileInfo)
+            ctx.body = new ErrorModel({
+                msg: error.dataPath + "：" + error.message,
+                code: 500
+            })
             return
         }
         // 验证成功，继续

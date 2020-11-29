@@ -18,6 +18,7 @@ const userApiRouter = require("./routes/api/user");
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const {REDIS_CONF} = require("./conf/db")
+const {SESSION_SECRET_KEY} = require("./conf/secretKeys")
 
 // error handlere
 let onerrorConf = {};
@@ -49,7 +50,7 @@ app.use(async (ctx, next) => {
 })
 
 // session 配置
-app.keys = ['jiangyf0725']
+app.keys = [SESSION_SECRET_KEY]
 app.use(session({
     // 配置 cookie
     cookie: {

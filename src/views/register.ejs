@@ -109,9 +109,9 @@
                     userName,
                     password,
                     gender
-                }, function(err, data) {
-                    if (err) {
-                        alert(err)
+                }, function(res) {
+                    if (res.code != 200) {
+                        alert(res.msg)
                         return
                     }
                     alert('注册成功，请登录')

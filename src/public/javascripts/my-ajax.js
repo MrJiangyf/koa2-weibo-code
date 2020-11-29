@@ -73,7 +73,6 @@
             contentType: 'application/json;charset=UTF-8',
             data: params ? JSON.stringify(params) : '',
             success: function(res) {
-                debugger
                 callback(res)
             },
             error: function(res) {

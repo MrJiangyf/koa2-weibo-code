@@ -22,9 +22,9 @@ class BaseModel {
  * 成功的数据模型
  */
 class SuccessModel extends BaseModel {
-    constructor({data, msg}) {
+    constructor({code, data, msg}) {
         super({
-            code: 200,
+            code: code ? code : 200,
             data,
             msg
         });

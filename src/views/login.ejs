@@ -30,9 +30,10 @@
                 ajax.post('/api/user/login', {
                     userName,
                     password
-                }, function(err, data) {
-                    if (err) {
-                        alert(err)
+                }, function(res) {
+                    debugger
+                    if (res) {
+                        alert(res.msg)
                         return
                     }
                     // 跳转到指定 url 或首页

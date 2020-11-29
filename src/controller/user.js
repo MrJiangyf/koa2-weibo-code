@@ -5,8 +5,9 @@
 const {getUserInfos, createUser} = require("../service/user");
 const {SuccessModel, ErrorModel} = require("../model/ResModel");
 const {doCrypto} = require("../utils/cryp");
+const {set} = require("../db/redis");
 
-const {registerUserNameNotExistInfo, registerUserNameExistInfos, registerFailInfo} = require("../model/ErrorInfos");
+const {registerUserNameNotExistInfo, registerUserNameExistInfos, registerFailInfo, loginFaileInfos} = require("../model/ErrorInfos");
 /**
  * @description 用户名是否存在
  */
@@ -55,10 +56,33 @@ async function register({userName, password, gender}) {
     } catch (e) {
         return  new ErrorModel(registerFailInfo);
     }
+}
 
+/**
+ * 登陆
+ * @param userName
+ * @param password
+ * @returns {Promise<ErrorModel|SuccessModel>}
+ */
+async function login(ctx, userName, password) {
+    const userInfo = await getUserInfos(userName, doCrypto(password));
+
+    if(userInfo) {
+        //登陆成功将用户信息存到session中
+        // ctx.session.userInfo = userInfo;
+        set("userInfo", userInfo)
+
+        return new SuccessModel({
+            msg: "登陆成功",
+            data: userInfo
+        })
+    }else {
+        return  new ErrorModel(loginFaileInfos);
+    }
 }
 
 module.exports = {
     isExist,
-    register
+    register,
+    login
 }

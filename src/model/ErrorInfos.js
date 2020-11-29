@@ -17,5 +17,10 @@ module.exports = {
     registerUserNameExistInfos: {
         code: 500,
         msg: "注册失败，用户名已经存在"
+    },
+    //登陆：失败
+    loginFaileInfos: {
+        code: 500,
+        msg: "登陆失败，请重新输入账号，密码"
     }
 }

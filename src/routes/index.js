@@ -13,13 +13,15 @@ router.get('/string', async (ctx, next) => {
 })
 
 router.get('/json', async (ctx, next) => {
+  debugger
   let viewNum = await get("viewNum");
-  let num = viewNum ? viewNum : 0;
+  let num = viewNum ? viewNum : 1;
   num = num + 1;
   set('viewNum', num);
 
   ctx.body = {
     title: 'koa2 json',
+    viewNum
   }
 })
 

@@ -7,10 +7,14 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const {isProd} = require("./utils/env");
 
+//路由
 const errorViewRouter = require('./routes/view/error');
 const index = require('./routes/index')
 const users = require('./routes/users')
+const userViewRouter = require("./routes/view/user");
+const userApiRouter = require("./routes/api/user");
 
+//redis
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const {REDIS_CONF} = require("./conf/db")
@@ -24,7 +28,7 @@ if (isProd) {
 }
 onerror(app, onerrorConf)
 
-// middlewares
+// 中间件：日志
 app.use(bodyparser({
     enableTypes: ['json', 'form', 'text']
 }))
@@ -59,9 +63,11 @@ app.use(session({
     })
 }));
 
-// routes
+// 路由相关
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
+app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
 // error-handling

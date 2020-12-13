@@ -2,12 +2,12 @@
  * @description user controller：1.处理业务逻辑，2.调用service处理好的数据，3.返回格式统一化
  */
 
-const {getUserInfos, createUser} = require("../service/user");
+const {getUserInfos, createUser, deleteUser} = require("../service/user");
 const {SuccessModel, ErrorModel} = require("../model/ResModel");
 const {doCrypto} = require("../utils/cryp");
 const {set} = require("../db/redis");
 
-const {deleteUser, registerUserNameNotExistInfo, registerUserNameExistInfos, registerFailInfo, loginFaileInfos} = require("../model/ErrorInfos");
+const {registerUserNameNotExistInfo, registerUserNameExistInfos, registerFailInfo, loginFaileInfos} = require("../model/ErrorInfos");
 /**
  * @description 用户名是否存在
  */
@@ -66,12 +66,12 @@ async function register({userName, password, gender}) {
  */
 async function login(ctx, userName, password) {
     const userInfo = await getUserInfos(userName, doCrypto(password));
-    debugger
     if(userInfo) {
         //登陆成功将用户信息存到session中
         // ctx.session.userInfo = userInfo;
         // set("userInfo", userInfo);
-        // 登录成功
+
+        // 登录成功（redis 存 session 暂时无法实现）
         if (ctx.session.userInfo == null) {
             ctx.session.userInfo = userInfo;
         }
@@ -91,6 +91,7 @@ async function login(ctx, userName, password) {
  * @returns {Promise<void>}
  */
 async function deleteCurUser(userName) {
+     debugger
      const result = await deleteUser(userName);
      if(result) {
          return new SuccessModel({

@@ -1,3 +1,6 @@
+/**
+ * 测试user模型是否正确
+ */
 
 const {User} = require("../../src/db/model/index");
 

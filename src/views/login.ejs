@@ -32,8 +32,8 @@
                     password
                 }, function(res) {
                     debugger
-                    if (res) {
-                        alert(res.msg)
+                    if (res.code != 200) {
+                        alert(res.msg);
                         return
                     }
                     // 跳转到指定 url 或首页

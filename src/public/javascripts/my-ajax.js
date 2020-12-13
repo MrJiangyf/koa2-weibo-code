@@ -50,17 +50,17 @@
             processData: false,
             data: formData,
             success: function(res) {
-                if (res.errno !== 0) {
+                if (res.code != 200) {
                     // 错误
-                    callback(res.message)
+                    callback(res.msg)
                     return
                 }
                 // 正确
-                callback(null, res.data)
+                callback(res)
             },
-            error: function(error) {
+            error: function(res) {
                 // 错误
-                callback(error.message)
+                callback(res.msg)
             }
         })
     }

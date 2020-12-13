@@ -6,7 +6,7 @@ router.prefix("/api/user");
 
 const {isExist, register, login, deleteCurUser} = require("../../controller/user");
 
-//对注册的信息进行校验
+//利用：json shema 对注册的信息进行校验
 const {genValidator} = require("../../middlewares/validator");
 const userValidate = require("../../validator/user");
 
@@ -31,12 +31,18 @@ router.post("/register", genValidator(userValidate) ,async (ctx, next) => {
     ctx.body = result;
 });
 
+/**
+ * 登陆
+ */
 router.post("/login", async (ctx, next) => {
     const {userName, password} = ctx.request.body;
     const result = await login(ctx, userName, password);
     ctx.body = result;
 });
 
+/**
+ * 删除用户
+ */
 router.post("/delete", async (ctx, next) => {
     //只有在test模式下才能删除当前用户信息
     debugger
@@ -45,9 +51,5 @@ router.post("/delete", async (ctx, next) => {
         ctx.body = await deleteCurUser(userName);
     }
 })
-
-
-
-
 
 module.exports = router;

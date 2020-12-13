@@ -1,3 +1,7 @@
+/**
+ * 测试登陆，注册功能
+ */
+
 const server = require("../server");
 
 // 用来测试的用户信息

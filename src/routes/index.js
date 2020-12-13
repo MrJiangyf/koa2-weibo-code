@@ -14,7 +14,7 @@ router.get('/string', async (ctx, next) => {
   }
 })
 
-router.get('/json', async (ctx, next) => {
+router.get('/json', loginCheck, async (ctx, next) => {
   let viewNum = await get("viewNum");
   let num = viewNum ? viewNum : 1;
   num = num + 1;

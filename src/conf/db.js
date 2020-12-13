@@ -7,7 +7,8 @@
 
 let REDIS_CONF = {
     port: 6379,
-    host: "111.231.145.124",
+    // host: "111.231.145.124",
+    host: "localhost"
 }
 
 let MYSQL_CONF = {

@@ -70,9 +70,9 @@ $(function() {
     var $filePicture = $('#file-picture')
     $filePicture.change(function (e) {
         var file = $filePicture[0].files[0]
-        ajax.upload('/api/utils/upload', file, function(err, data) {
-            if (err) {
-                alert(err)
+        ajax.upload('/api/utils/upload', file, function({data, code, msg}) {
+            if (code != 200) {
+                alert(msg)
                 return
             }
             // 成功

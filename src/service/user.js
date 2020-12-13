@@ -53,7 +53,7 @@ async function deleteUser(userName) {
         }
     })
     // result:删除的行数
-    return result[0] > 0;
+    return result > 0;
 }
 
 /**

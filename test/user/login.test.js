@@ -67,8 +67,44 @@ test("登陆， 应该成功", async () => {
     COOKIE = res.headers["set-cookie"].join(";")
 });
 
+
+/**
+ * 修改用户信息, 用户密码接口
+ */
+test("修改用户信息，应该成功", async () => {
+    const res = await server.patch("/api/user/changeInfo")
+        .send({
+            nickName: "test111",
+            city: "test-city",
+            picture: "/test.png",
+        })
+        .set("cookie", COOKIE);
+    expect(res.body.code).toBe(200);
+});
+
+test("修改用户密码，应该成功", async () => {
+    const res = await server.patch("/api/user/changePassword")
+        .send({
+            password,
+            newPassword: `test_mima`
+        })
+        .set("cookie", COOKIE);
+    expect(res.body.code).toBe(200);
+});
+
 // 删除
 test("删除用户，应该成功", async () => {
     const res = await server.post("/api/user/delete").set("cookie", COOKIE);
     expect(res.body.code).toBe(200);
-})
+});
+
+
+// 退出
+test("退出登陆，应该成功", async () => {
+    const res = await server.post("/api/user/logout")
+        .set("cookie", COOKIE);
+    expect(res.body.code).toBe(200);
+});
+
+
+

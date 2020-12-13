@@ -12,7 +12,6 @@ const { ErrorModel } = require('../model/ResModel')
  * @param {function} next next
  */
 async function loginCheck(ctx, next) {
-    debugger
     if (ctx.session && ctx.session.userInfo) {
         // 已登录
         await next()

@@ -91,7 +91,6 @@ async function login(ctx, userName, password) {
  * @returns {Promise<void>}
  */
 async function deleteCurUser(userName) {
-     debugger
      const result = await deleteUser(userName);
      if(result) {
          return new SuccessModel({

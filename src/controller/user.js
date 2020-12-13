@@ -7,7 +7,7 @@ const {SuccessModel, ErrorModel} = require("../model/ResModel");
 const {doCrypto} = require("../utils/cryp");
 const {set} = require("../db/redis");
 
-const {registerUserNameNotExistInfo, registerUserNameExistInfos, registerFailInfo, loginFaileInfos} = require("../model/ErrorInfos");
+const {deleteUser, registerUserNameNotExistInfo, registerUserNameExistInfos, registerFailInfo, loginFaileInfos} = require("../model/ErrorInfos");
 /**
  * @description 用户名是否存在
  */
@@ -66,23 +66,48 @@ async function register({userName, password, gender}) {
  */
 async function login(ctx, userName, password) {
     const userInfo = await getUserInfos(userName, doCrypto(password));
-
+    debugger
     if(userInfo) {
         //登陆成功将用户信息存到session中
         // ctx.session.userInfo = userInfo;
-        set("userInfo", userInfo)
+        // set("userInfo", userInfo);
+        // 登录成功
+        if (ctx.session.userInfo == null) {
+            ctx.session.userInfo = userInfo;
+        }
 
         return new SuccessModel({
             msg: "登陆成功",
-            data: userInfo
+            data: ""
         })
     }else {
         return  new ErrorModel(loginFaileInfos);
     }
 }
 
+/**
+ * 删除当前用户相关信息
+ * @param userName
+ * @returns {Promise<void>}
+ */
+async function deleteCurUser(userName) {
+     const result = await deleteUser(userName);
+     if(result) {
+         return new SuccessModel({
+             data: "",
+             msg: '删除成功',
+         })
+
+         return new ErrorModel({
+             data: "",
+             msg: "删除失败"
+         })
+     }
+}
+
 module.exports = {
     isExist,
     register,
-    login
+    login,
+    deleteCurUser
 }

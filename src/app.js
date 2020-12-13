@@ -50,19 +50,20 @@ app.use(async (ctx, next) => {
 })
 
 // session 配置
-app.keys = [SESSION_SECRET_KEY]
+app.keys = [SESSION_SECRET_KEY];
 app.use(session({
-    // 配置 cookie
+    keys: 'weibo.sid', // cookie name 默认是 `koa.sid`
+    prefix: 'weibo:sess:', // redis key 的前缀，默认是 `koa:sess:`
     cookie: {
         path: '/',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000  // 单位 ms
     },
     // 配置 redis
     store: redisStore({
         all: "111.231.145.124:6379"
     })
-}));
+}))
 
 // 路由相关
 app.use(index.routes(), index.allowedMethods())

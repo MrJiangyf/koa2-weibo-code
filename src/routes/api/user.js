@@ -4,11 +4,13 @@
 const router = require('koa-router')();
 router.prefix("/api/user");
 
-const {isExist, register, login} = require("../../controller/user");
+const {isExist, register, login, deleteCurUser} = require("../../controller/user");
 
 //对注册的信息进行校验
 const {genValidator} = require("../../middlewares/validator");
 const userValidate = require("../../validator/user");
+
+const {isTest} = require("../../utils/env");
 
 /**
  * 用户名是否存在
@@ -33,6 +35,15 @@ router.post("/login", async (ctx, next) => {
     const {userName, password} = ctx.request.body;
     const result = await login(ctx, userName, password);
     ctx.body = result;
+});
+
+router.post("/delete", async (ctx, next) => {
+    //只有在test模式下才能删除当前用户信息
+    debugger
+    if(isTest) {
+        const {userName} = ctx.session.userInfo;
+        ctx.body = await deleteCurUser(userName);
+    }
 })
 
 

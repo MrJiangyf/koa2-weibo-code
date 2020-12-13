@@ -13,7 +13,6 @@ function genValidator(validateFn) {
     async function validator(ctx, next) {
         const data = ctx.request.body
         const error = validateFn(data)
-        debugger
         if (error) {
             // 验证失败
             ctx.body = new ErrorModel({

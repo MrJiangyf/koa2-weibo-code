@@ -5,8 +5,8 @@
 module.exports = {
     //用户名不存在
     registerUserNameNotExistInfo: {
-        code: 200,
-        msg: "用户名可以使用"
+        code: 500,
+        msg: "用户名不可以使用"
     },
     //注册失败
     registerFailInfo: {

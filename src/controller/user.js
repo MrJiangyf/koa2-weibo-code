@@ -2,7 +2,7 @@
  * @description user controller：1.处理业务逻辑，2.调用service处理好的数据，3.返回格式统一化
  */
 
-const {getUserInfos, createUser, deleteUser} = require("../service/user");
+const {getUserInfos, createUser, deleteUser, updateUser} = require("../service/user");
 const {SuccessModel, ErrorModel} = require("../model/ResModel");
 const {doCrypto} = require("../utils/cryp");
 const {set} = require("../db/redis");
@@ -106,9 +106,81 @@ async function deleteCurUser(userName) {
      }
 }
 
+/**
+ * 修改用户信息
+ * @param ctx
+ * @param nickName
+ * @param city
+ * @param picture
+ * @returns {Promise<void>}
+ */
+async function changeInfo(ctx, {nickName, city, picture}) {
+    const { userName } = ctx.session.userInfo;
+
+    const result = await updateUser(
+        {
+            newNickName: nickName,
+            newCity: city,
+            newPicture: picture,
+        }, {
+            userName
+        })
+
+    if(result) {
+        //修改用户信息成功，要同时更新session中userInfo
+        Object.assign(ctx.session.userInfo, {
+            nickName,
+            city,
+            picture
+        })
+        return new SuccessModel({
+            msg: "修改用户信息成功",
+            data: ""
+        })
+    }else {
+        return new ErrorModel({
+            data: "",
+            msg: "修改用户信息失败"
+        })
+    }
+
+}
+
+
+async function changePassword({userName, password, newPassword}) {
+    const result = await updateUser({
+        newPassword: doCrypto(newPassword)
+    }, {
+        userName,
+        password: doCrypto(password)
+    })
+    if(result) {
+        return new SuccessModel({
+            msg: "修改用户密码成功",
+            data: ""
+        })
+    }else {
+        return new ErrorModel({
+            data: "",
+            msg: "修改用户密码失败"
+        })
+    }
+}
+
+
+async function logout(ctx) {
+    delete ctx.session.userInfo;
+    return new SuccessModel({
+        msg: "成功退出"
+    })
+}
+
 module.exports = {
     isExist,
     register,
     login,
-    deleteCurUser
+    deleteCurUser,
+    changeInfo,
+    changePassword,
+    logout
 }

@@ -1,7 +1,7 @@
 const seq = require("./seq");
 
 //调用user、blog创建相应的表
-require("./model/User");
+require("./model/index");
 
 //测试连接
 seq.authenticate().then(() => {

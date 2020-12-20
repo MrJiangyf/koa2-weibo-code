@@ -58,12 +58,14 @@ $(function () {
         ajax.post('/api/blog/create', {
             content: content,
             image: imgUrl
-        }, function (err) {
-            if (err) {
-                // 失败
-                alert(err)
+        }, function({data, code, msg}) {
+            if (code != 200) {
+                alert(msg)
                 return
+            }else {
+                alert(msg)
             }
+
             // 成功
             $filePicture.val('')
             $spanImgName.text('')
@@ -76,10 +78,10 @@ $(function () {
     })
 
     // @ 功能
-    $textContent.atwho({
-        at: '@',
-        data: '/api/user/getAtList'
-        // data: ['Peter', 'Tom', 'Anne']
-    })
+    // $textContent.atwho({
+    //     at: '@',
+    //     data: '/api/user/getAtList'
+    //     // data: ['Peter', 'Tom', 'Anne']
+    // })
 })
 </script>

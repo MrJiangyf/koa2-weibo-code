@@ -2,7 +2,7 @@ const router = require('koa-router')()
 const {set, get} = require("../db/redis");
 const {loginRedirect, loginCheck} = require("../middlewares/loginChecks");
 
-router.get('/', loginRedirect, async (ctx, next) => {
+router.get('/testIndex', loginRedirect, async (ctx, next) => {
   await ctx.render('index', {
     title: 'Hello Koa 2!'
   })

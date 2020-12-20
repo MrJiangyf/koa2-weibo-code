@@ -16,6 +16,8 @@ const users = require('./routes/users')
 const userViewRouter = require("./routes/view/user");
 const userApiRouter = require("./routes/api/user");
 const untilsApiRouter = require("./routes/api/utils");
+const blogViewRouter = require("./routes/view/blog");
+const blogHomeApiRouter = require("./routes/api/blog-home");
 
 //redis
 const session = require('koa-generic-session')
@@ -75,6 +77,8 @@ app.use(users.routes(), users.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(untilsApiRouter.routes(), untilsApiRouter.allowedMethods())
+app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
+app.use(blogHomeApiRouter.routes(), blogHomeApiRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
 // error-handling

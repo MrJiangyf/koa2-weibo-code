@@ -9,7 +9,7 @@ async function createBlog({content, image, userId}) {
          content,
          image
      })
-    return result.dateValues;
+    return result.dataValues;
 }
 
 

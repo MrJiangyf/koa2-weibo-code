@@ -46,7 +46,6 @@ router.post("/login", async (ctx, next) => {
  */
 router.post("/delete", async (ctx, next) => {
     //只有在test模式下才能删除当前用户信息
-    debugger
     if(isTest) {
         const {userName} = ctx.session.userInfo;
         ctx.body = await deleteCurUser(userName);

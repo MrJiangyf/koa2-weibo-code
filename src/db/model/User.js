@@ -37,7 +37,7 @@ const User = seq.define("user", {
         type: STRING,
         comment: "城市"
     }
-});
+},);
 
 module.exports = {
     User
